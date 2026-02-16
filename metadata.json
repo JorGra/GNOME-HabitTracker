@@ -1,0 +1,8 @@
+{
+  "name": "Dock-HabitTracker",
+  "description": "Small GNOME habit tracker",
+  "uuid": "habittracker@jg.com",
+  "shell-version": [
+    "49"
+  ]
+}
