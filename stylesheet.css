@@ -1,26 +1,30 @@
 /* Add your custom extension styling here */
 
 .habit-row {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 2px;
 }
 
 .habit-row-header > * {
-  margin-right: 8px;
+  margin-right: 6px;
 }
 .habit-row-header > *:last-child {
   margin-right: 0;
 }
 .habit-row-header {
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
 }
 
 .habit-expand-button, .habit-remove-button, .habit-edit-button {
-  padding: 2px;
-  border-radius: 6px;
+  padding: 4px 6px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
+  min-width: 28px;
+  min-height: 28px;
 }
 
 .habit-expand-button:hover, .habit-remove-button:hover, .habit-edit-button:hover {
@@ -36,24 +40,13 @@
 }
 
 .habit-toggle {
-  padding: 6px 10px;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.12);
+  padding: 4px;
+  border-radius: 99px;
+  background-color: transparent;
   color: @theme_fg_color;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  min-width: 32px;
-  min-height: 32px;
-}
-
-.habit-toggle-content > * {
-  margin-right: 4px;
-}
-.habit-toggle-content > *:last-child {
-  margin-right: 0;
-}
-
-.habit-toggle-icon {
-  icon-size: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .habit-toggle-done {
@@ -65,7 +58,7 @@
 .habit-week-strip {
   margin-top: 0;
   padding-top: 0;
-  padding-bottom: 12px;
+  padding-bottom: 2px;
 }
 
 .habit-week-column {
@@ -127,12 +120,12 @@
 
 .habit-year-scroll {
   max-height: 120px;
-  margin-top: 12px;
+  margin-top: 0;
   border: none;
 }
 
 .habit-details {
-  margin-top: 12px;
+  margin-top: 4px;
 }
 
 .habit-year-dot {

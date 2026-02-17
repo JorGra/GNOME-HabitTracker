@@ -47,6 +47,7 @@ export const createHabitRow = ({
         icon_name: iconName,
         style_class: 'habit-row-icon',
         icon_size: 20,
+        y_align: Clutter.ActorAlign.CENTER,
     });
     header.add_child(icon);
 
@@ -54,6 +55,7 @@ export const createHabitRow = ({
         vertical: true,
         x_expand: true,
         y_expand: false,
+        y_align: Clutter.ActorAlign.CENTER,
     });
     const titleLabel = new St.Label({
         text: habit.name,
@@ -64,14 +66,17 @@ export const createHabitRow = ({
     header.add_child(labels);
 
     const toggleIcon = new St.Icon({
-        icon_name: doneToday ? 'emblem-ok-symbolic' : 'checkbox-unchecked-symbolic',
-        icon_size: 20,
+        icon_name: 'emblem-ok-symbolic',
+        icon_size: 16,
         style_class: 'habit-toggle-icon',
     });
+    if (!doneToday)
+        toggleIcon.opacity = 0;
     const toggle = new St.Button({
         style_class: ['habit-toggle', doneToday ? 'habit-toggle-done' : ''].join(' '),
         child: toggleIcon,
         x_align: Clutter.ActorAlign.START,
+        y_align: Clutter.ActorAlign.CENTER,
         can_focus: true,
     });
     toggle.connect('clicked', () => onToggleToday?.(habit.id, !doneToday));
@@ -80,24 +85,57 @@ export const createHabitRow = ({
     const expandIcon = new St.Icon({
         icon_name: expanded ? 'pan-up-symbolic' : 'pan-down-symbolic',
         style_class: 'habit-expand-icon',
-        icon_size: 12,
+        icon_size: 14,
     });
     const expandBtn = new St.Button({
         child: expandIcon,
         style_class: 'habit-expand-button',
         can_focus: true,
     });
+
+    let isExpanded = expanded;
     expandBtn.connect('clicked', () => {
-        const next = !details.visible;
-        details.visible = next;
-        expandIcon.icon_name = next ? 'pan-up-symbolic' : 'pan-down-symbolic';
-        onToggleExpand?.(habit.id, next);
+        isExpanded = !isExpanded;
+        details.remove_all_transitions();
+
+        if (isExpanded) {
+            details.visible = true;
+            details.opacity = 0;
+            const [, natHeight] = details.get_preferred_height(-1);
+            details.height = 0;
+            details.ease({
+                height: natHeight,
+                opacity: 255,
+                duration: 200,
+                mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+                onComplete: () => {
+                    details.height = -1;
+                },
+            });
+        } else {
+            const [, natHeight] = details.get_preferred_height(-1);
+            details.height = natHeight;
+            details.ease({
+                height: 0,
+                opacity: 0,
+                duration: 200,
+                mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+                onComplete: () => {
+                    details.visible = false;
+                    details.height = -1;
+                    details.opacity = 255;
+                },
+            });
+        }
+
+        expandIcon.icon_name = isExpanded ? 'pan-up-symbolic' : 'pan-down-symbolic';
+        onToggleExpand?.(habit.id, isExpanded);
     });
     header.add_child(expandBtn);
 
     const editBtn = new St.Button({
         style_class: 'habit-edit-button',
-        child: new St.Icon({ icon_name: 'document-edit-symbolic', icon_size: 14 }),
+        child: new St.Icon({ icon_name: 'document-edit-symbolic', icon_size: 16 }),
         can_focus: true,
     });
     editBtn.connect('clicked', () => onEdit?.(habit.id));
@@ -105,7 +143,7 @@ export const createHabitRow = ({
 
     const removeBtn = new St.Button({
         style_class: 'habit-remove-button',
-        child: new St.Icon({ icon_name: 'user-trash-symbolic', icon_size: 14 }),
+        child: new St.Icon({ icon_name: 'user-trash-symbolic', icon_size: 16 }),
         can_focus: true,
     });
     removeBtn.connect('clicked', () => onRemove?.(habit.id));
@@ -121,6 +159,7 @@ export const createHabitRow = ({
         visible: expanded,
         style_class: 'habit-details',
         x_expand: true,
+        clip_to_allocation: true,
     });
 
     const yearGrid = createYearGrid(
