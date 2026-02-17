@@ -65,11 +65,18 @@ export const createHabitRow = ({
     labels.add_child(titleLabel);
     header.add_child(labels);
 
+    const toggleIcon = new St.Icon({
+        icon_name: 'emblem-ok-symbolic',
+        icon_size: 16,
+    });
+    if (!doneToday)
+        toggleIcon.opacity = 0;
+    const toggleStyle = doneToday
+        ? 'border-radius: 99px; background-color: #78aeed; border: 2px solid #78aeed; padding: 6px; color: white;'
+        : 'border-radius: 99px; background-color: transparent; border: 2px solid #78aeed; padding: 6px;';
     const toggle = new St.Button({
-        style_class: ['habit-toggle', doneToday ? 'habit-toggle-done' : ''].join(' '),
-        child: doneToday
-            ? new St.Icon({ icon_name: 'emblem-ok-symbolic', icon_size: 16 })
-            : new St.Widget({ width: 16, height: 16 }),
+        style: toggleStyle,
+        child: toggleIcon,
         y_align: Clutter.ActorAlign.CENTER,
         can_focus: true,
     });

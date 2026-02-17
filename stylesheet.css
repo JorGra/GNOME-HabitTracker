@@ -39,28 +39,6 @@
   font-weight: bold;
 }
 
-.habit-toggle {
-  padding: 5px;
-  border-radius: 99px;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: @theme_fg_color;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-}
-
-.habit-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-.habit-toggle-done {
-  background-color: #5fa8f4;
-  border-color: #5fa8f4;
-  color: @accent_fg_color;
-}
-
-.habit-toggle-done:hover {
-  background-color: #4a93df;
-  border-color: #4a93df;
-}
 
 .habit-week-strip {
   margin-top: 0;
