@@ -19,6 +19,7 @@ import { todayString, weekDates } from './src/date-utils.js';
 import { loadHabits, saveHabits, ensureDataDir } from './src/storage.js';
 import { AddHabitDialog } from './src/dialogs/add-habit-dialog.js';
 import { createHabitRow } from './src/views/habit-row.js';
+import { ConfirmDialog } from './src/dialogs/confirm-dialog.js';
 import { DEFAULT_ICON, ICON_CHOICES } from './src/constants.js';
 
 const HabitTrackerIndicator = GObject.registerClass(
@@ -147,6 +148,21 @@ class HabitTrackerIndicator extends PanelMenu.Button {
         this._renderHabits();
     }
 
+    _confirmRemoveHabit(habitId) {
+        const habit = this._habits.find(h => h.id === habitId);
+        if (!habit)
+            return;
+
+        this._destroyDialog();
+        this._addDialog = new ConfirmDialog({
+            message: _('Remove "%s"?').format(habit.name),
+            confirmLabel: _('Remove'),
+            onConfirm: () => this._removeHabit(habitId),
+            _: _,
+        });
+        this._addDialog.open(global.get_current_time());
+    }
+
     _removeHabit(habitId) {
         this._habits = this._habits.filter(h => h.id !== habitId);
         this._expandedIds.delete(habitId);
@@ -182,7 +198,7 @@ class HabitTrackerIndicator extends PanelMenu.Button {
                     this._renderHabits();
                 },
                 onToggleDate: (habitId, dateStr) => this._toggleHabitDay(habitId, dateStr),
-                onRemove: (habitId) => this._removeHabit(habitId),
+                onRemove: (habitId) => this._confirmRemoveHabit(habitId),
                 onEdit: (habitId) => this._openEditDialog(habitId),
                 onToggleExpand: (habitId, isExpanded) => {
                     if (isExpanded)

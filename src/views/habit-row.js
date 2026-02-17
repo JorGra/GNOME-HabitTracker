@@ -65,17 +65,11 @@ export const createHabitRow = ({
     labels.add_child(titleLabel);
     header.add_child(labels);
 
-    const toggleIcon = new St.Icon({
-        icon_name: 'emblem-ok-symbolic',
-        icon_size: 16,
-        style_class: 'habit-toggle-icon',
-    });
-    if (!doneToday)
-        toggleIcon.opacity = 0;
     const toggle = new St.Button({
         style_class: ['habit-toggle', doneToday ? 'habit-toggle-done' : ''].join(' '),
-        child: toggleIcon,
-        x_align: Clutter.ActorAlign.START,
+        child: doneToday
+            ? new St.Icon({ icon_name: 'emblem-ok-symbolic', icon_size: 16 })
+            : new St.Widget({ width: 16, height: 16 }),
         y_align: Clutter.ActorAlign.CENTER,
         can_focus: true,
     });
